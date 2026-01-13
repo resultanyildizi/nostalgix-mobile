@@ -2,6 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:nostalgix/application/auth_cubit/auth_cubit.dart';
+import 'package:nostalgix/application/bottom_navbar_cubit/bottom_navbar_cubit.dart';
 import 'package:nostalgix/infrastructure/auth/auth_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -27,5 +28,8 @@ Future<void> setupInjection() async {
   // Application layer dependencies.
   getIt.registerFactory<AuthCubit>(() {
     return AuthCubit(getIt<AuthClient>());
+  });
+  getIt.registerFactory<BottomNavbarCubit>(() {
+    return BottomNavbarCubit();
   });
 }

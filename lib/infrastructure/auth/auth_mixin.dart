@@ -49,6 +49,16 @@ mixin AuthMixin {
     }
   }
 
+  Future<Either<Failure, Unit>> removeAuthTokens() async {
+    try {
+      await secureStorage.delete(key: refreshTokenKey);
+      await secureStorage.delete(key: accessTokenKey);
+      return right(unit);
+    } catch (e) {
+      return left(UnknownFailure(e.toString()));
+    }
+  }
+
   Future<Either<Failure, AuthTokens>> getAuthTokens() async {
     try {
       final refreshToken = await secureStorage.read(key: refreshTokenKey);

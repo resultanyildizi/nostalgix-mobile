@@ -17,7 +17,7 @@ class AppTheme {
       textPrimary: Color(0xFF2C241B),
       textSecondary: Color(0xFF857F72),
       primary: Color(0xFFD4A373),
-      border: Color(0xFFF2F2F2),
+      border: Color.fromARGB(255, 219, 208, 196),
     );
   }
 

@@ -90,6 +90,42 @@ class AuthClient with AuthMixin implements IAuthClient {
   }
 
   @override
+  Future<Either<Failure, Unit>> logout() async {
+    return sendRequestWithTokens(
+      (accessToken) async {
+        return client.post(
+          Uri.parse(
+            'http://localhost:8080/v1/auth/logout',
+          ),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $accessToken'
+          },
+          body: jsonEncode({'device_key': await getUniqueDeviceKey()}),
+        );
+      },
+      (r) async {
+        if (r.statusCode == HttpStatus.unauthorized) {
+          return left(UnauthorizedFailure());
+        } else if (r.statusCode == HttpStatus.notFound) {
+          return left(NotFoundFailure());
+        } else if (r.statusCode == HttpStatus.ok) {
+          return removeAuthTokens();
+        } else {
+          return left(UnknownFailure(r.statusCode.toString()));
+        }
+      },
+      (e) async {
+        if (e is SocketException) {
+          return left(NetworkFailure());
+        } else {
+          return left(UnknownFailure(e.toString()));
+        }
+      },
+    );
+  }
+
+  @override
   Future<Either<Failure, AuthTokens>> getStoredTokens() {
     return getAuthTokens();
   }

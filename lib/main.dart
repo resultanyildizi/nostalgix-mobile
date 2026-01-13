@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nostalgix/application/auth_cubit/auth_cubit.dart';
+import 'package:nostalgix/application/bottom_navbar_cubit/bottom_navbar_cubit.dart';
 import 'package:nostalgix/dependency_injection.dart';
 import 'package:nostalgix/presentation/splash/splash_page.dart';
 
@@ -19,11 +19,13 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => getIt<AuthCubit>()),
+        BlocProvider(create: (context) => getIt<BottomNavbarCubit>()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Nostalgix',
         theme: ThemeData(
+          splashFactory: NoSplash.splashFactory,
           colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.deepPurple,
           ),
@@ -33,3 +35,18 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+// class NoSplash extends StatelessWidget {
+//   NoSplash({this.child});
+
+//   final Widget child;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return NotificationListener<OverscrollIndicatorNotification>(
+//         onNotification: (OverscrollIndicatorNotification overscroll) {
+//           overscroll.disallowGlow();
+//           return true;
+//         },
+//         child: child);
+//   }
+// }
