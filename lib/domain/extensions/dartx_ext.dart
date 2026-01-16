@@ -5,3 +5,9 @@ extension EitherExt<L, R> on Either<L, R> {
     return fold(some, (_) => none());
   }
 }
+
+extension OptionExt<S> on Option<S> {
+  S getOrCrash() {
+    return fold(() => throw AssertionError(), id);
+  }
+}

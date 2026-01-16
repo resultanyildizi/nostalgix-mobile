@@ -27,11 +27,12 @@ class AuthCubit extends Cubit<AuthState> {
 
     emit(state.copyWith(
       processFailOption: failOrUnit.toLeftOption(),
+      userOption: failOrUnit.isRight() ? none() : null,
       isProcessing: false,
     ));
   }
 
-  Future<void> loginAnonymously() async {
+  Future<void> loginAnon() async {
     emit(state.copyWith(
       userOption: none(),
       processFailOption: none(),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:nostalgix/application/auth_cubit/auth_cubit.dart';
 import 'package:nostalgix/application/bottom_navbar_cubit/bottom_navbar_cubit.dart';
+import 'package:nostalgix/domain/failure/failure.dart';
 import 'package:nostalgix/presentation/album/album_page.dart';
+import 'package:nostalgix/presentation/common/functions/handle_failure.dart';
 import 'package:nostalgix/presentation/constants/app_fonts.dart';
 import 'package:nostalgix/presentation/extensions/context_extension.dart';
 import 'package:nostalgix/presentation/settings/settings_page.dart';
@@ -27,14 +29,36 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     controller = PageController();
+    context.read<BottomNavbarCubit>().selectTab(0);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<BottomNavbarCubit, BottomNavbarState>(
-      listener: (context, state) {
-        controller.jumpToPage(state.currentIndex);
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<BottomNavbarCubit, BottomNavbarState>(
+          listener: (context, state) {
+            controller.jumpToPage(state.currentIndex);
+          },
+        ),
+        BlocListener<AuthCubit, AuthState>(
+          listenWhen: (previous, current) {
+            return previous.userOption.isSome() && current.userOption.isNone();
+          },
+          listener: (context, state) {
+            handleFailure(context, UnauthorizedFailure());
+          },
+        ),
+        BlocListener<AuthCubit, AuthState>(
+          listenWhen: (previous, current) {
+            return previous.processFailOption.isNone() &&
+                current.processFailOption.isSome();
+          },
+          listener: (context, state) {
+            handleFailure(context, state.failOrCrash);
+          },
+        ),
+      ],
       child: Scaffold(
         body: PageView(
           physics: NeverScrollableScrollPhysics(),

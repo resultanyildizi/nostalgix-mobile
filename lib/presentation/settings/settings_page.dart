@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:nostalgix/application/auth_cubit/auth_cubit.dart';
 import 'package:nostalgix/presentation/constants/app_fonts.dart';
 import 'package:nostalgix/presentation/extensions/context_extension.dart';
+import 'package:scale_button/scale_button.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -90,14 +90,14 @@ class SettingsPageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 16,
-        horizontal: 16,
-      ),
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: onTap,
+    return ScaleButton(
+      bound: 0.2,
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 16,
+        ),
         child: Row(
           children: [
             Container(

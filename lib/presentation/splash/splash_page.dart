@@ -5,6 +5,7 @@ import 'package:nostalgix/presentation/constants/app_assets.dart';
 import 'package:nostalgix/presentation/constants/app_fonts.dart';
 import 'package:nostalgix/presentation/extensions/context_extension.dart';
 import 'package:nostalgix/presentation/home/home_page.dart';
+import 'package:nostalgix/presentation/login/login_page.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -53,6 +54,15 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           },
           listener: (context, state) {
             Navigator.pushReplacement(context, HomePage.route());
+          },
+        ),
+        BlocListener<AuthCubit, AuthState>(
+          listenWhen: (previous, current) {
+            return previous.processFailOption.isNone() &&
+                current.processFailOption.isSome();
+          },
+          listener: (context, state) {
+            Navigator.pushReplacement(context, LoginPage.route());
           },
         ),
       ],

@@ -19,6 +19,10 @@ final class AuthState extends Equatable {
   final Option<Failure> processFailOption;
   final bool isProcessing;
 
+  Failure get failOrCrash {
+    return processFailOption.getOrCrash();
+  }
+
   AuthState copyWith({
     Option<User>? userOption,
     Option<Failure>? processFailOption,
